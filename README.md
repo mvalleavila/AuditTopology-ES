@@ -30,8 +30,9 @@ This bolt is based on https://github.com/hmsonline/storm-elastic-search
 ## Compilation
   
 ```
-  ./run.sh
+  ./compile.sh
 ```  
+
 ## Config topology
 ```
 # MANDATORY PROPERTIES
@@ -79,11 +80,8 @@ elasticsearch.type=
 ```
   
 ## Run topology
-
-First create the HBaseTable if previously is not created:
 ```
-  hbase shell
-  hbase > create 'TableName', 'ColumnFamily'
+   ./run.sh
 ```
 
 ### Storm dependencies
