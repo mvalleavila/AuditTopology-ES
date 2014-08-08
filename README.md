@@ -92,11 +92,6 @@ Some libraries are required int storm lib directory:
   storm-elasticsearch-0.1.3.jar
 ```
 
-### Run\submit topology  
-```
- ./run.sh
-```
-
 ## See results
 Open Kibana and see the results
   
