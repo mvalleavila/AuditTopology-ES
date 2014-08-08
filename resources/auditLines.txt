@@ -1,0 +1,2 @@
+node=mncars006 type=USER_LOGIN msg=audit(1394177340.444:184651): user pid=28620 uid=0 auid=502 ses=30508 msg='op=login id=502 exe="/usr/sbin/sshd" hostname=2.2.2.14 addr=2.2.2.14 terminal=/dev/pts/0 res=success' username=mark
+node=mncars006 type=USER_LOGOUT msg=audit(1394177340.444:184651): user pid=28620 uid=0 auid=502 ses=30508 msg='op=login id=502 exe="/usr/sbin/sshd" hostname=2.2.2.14 addr=2.2.2.14 terminal=/dev/pts/0 res=success' username=root
