@@ -1,15 +1,15 @@
-# StormTopology-AuditActiveLogins
+# StormTopology-AuditActiveLogins-Elasticsearch
 
 ## Description
 
 AuditActiveLogins is a test storm topology for learning purpose.
 
-It counts the User Logins and User Logouts from an audit.log lines, readed from Kafka and insert/update the information in a HBase table.
+It counts the User Logins and User Logouts from an audit.log lines, readed from Kafka and insert/update the information in a Elasticsearch.
 
 ## Storm topology description
 
 The topology has the following Components:  
-  KafkaSpout -> AuditParserBolt -> AuditLoginsCounterBolt -> HBaseBolt
+  KafkaSpout -> AuditParserBolt -> AuditLoginsCounterBolt -> ElasticsearchBolt
   
 ### KafkaSpout: 
 Connects to a Kafka topic and get the audit lines (previously inserted with flume)  
@@ -23,15 +23,14 @@ Treat the audit line information and pass it to HbaseBolt for insert/update a ro
 In case of user login line, insert a new row with node|user rowkey and counter set to 1 or update an existing row incrementing the counter 1 unit.  
 In case of user logout decrement the counter 1 unit (checking previously if the row exist and its counter is greater than zero)
 
-### HBaseBolt
-Is the responsible of put/update information in HBaseTable  
-This bolt is based on https://github.com/ptgoetz/storm-hbase
+### ElasticsearchBolt
+Is the responsible of put/update information in Elasticsearch
+This bolt is based on https://github.com/hmsonline/storm-elastic-search
   
 ## Compilation
-  TODO: Currently a workaround is neccesary for load hbase configuration properties, hbase-site.xml is included in compilation time, and before compilation is neccesary to change the configuration values. hbase-site.xml is in resources directory
   
 ```
-  mvn clean package
+  ./run.sh
 ```  
 ## Config topology
 ```
@@ -43,9 +42,12 @@ zookeeper.hosts=
 # kafka topic for read messages
 kafka.topic=
 
-# hbase table and column family names to insert results
-hbase.table.name=
-hbase.column.family=
+# Elasticsearch properties
+elasticsearch.host=
+elasticsearch.port=
+elasticsearch.cluster.name=
+elasticsearch.index=
+elasticsearch.type=
 
 # OPTIONAL PROPERTIES
 
@@ -88,24 +90,16 @@ First create the HBaseTable if previously is not created:
 
 Some libraries are required int storm lib directory:
 ```
-kafka_2.9.2-0.8.0.jar
-metrics-core-2.2.0.jar
-scala-library-2.9.2.jar
-storm-hbase-0.1.0-SNAPSHOT-jar-with-dependencies.jar
-storm-kafka-0.8-plus-0.5.0-SNAPSHOT.jar
+  storm-kafka-0.9.2-incubating.jar
+  storm-elasticsearch-0.1.3.jar
 ```
-storm-hbase-0.1.0-SNAPSHOT-jar-with-dependencies.jar -> from https://github.com/mvalleavila/storm-kafka-0.8-plus  
-storm-kafka-0.8-plus-0.5.0-SNAPSHOT.jar -> from https://github.com/buildoop/storm-hbase
-  
+
 ### Run\submit topology  
 ```
-storm jar target/AuditActiveLogins-0.1.0.jar org.buildoop.storm.AuditActiveLoginsTopology resources/configuration.properties
+ ./run.sh
 ```
 
 ## See results
-```
-hbase shell
-hbase > scan 'TableName'
-```
+Open Kibana and see the results
   
 
